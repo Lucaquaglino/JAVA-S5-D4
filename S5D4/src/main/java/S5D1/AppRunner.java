@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import S5D1.dao.PizzaDAO;
 import S5D1.dao.PizzaRepository;
 import S5D1.entities.Pizza;
 
@@ -14,18 +13,18 @@ import S5D1.entities.Pizza;
 public class AppRunner implements CommandLineRunner {
 
 	@Autowired
-	private PizzaDAO uDAO;
-
-	@Autowired
 	private PizzaRepository repo;
+	@Autowired
+	private Config appConfig;
 
 	@Override
 	public void run(String... args) throws Exception {
 		Pizza pizza = Pizza.builder().nome("Pizzamargherita").prezzo(5).infoNutrizionali("nutrizionali").build();
-
 		repo.save(pizza);
+		repo.save(appConfig.diavolaPizza());
+		System.out.println((appConfig.diavolaPizza().getNome() + " salvata!"));
 		System.out.println((pizza.getNome() + " salvata!"));
-		Optional<Pizza> pizzaOptional = repo.findByNome("Pizzamargherita");
+		Optional<Pizza> pizzaOptional = repo.findById("Pizzamargherita");
 		if (pizzaOptional.isPresent()) {
 			Pizza pizzaTrovata = pizzaOptional.get();
 			System.out.println("Pizza trovata: " + pizzaTrovata.getNome());
